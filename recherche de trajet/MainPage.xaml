@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NolanReymondMapApi.MainPage"
+             BackgroundColor="#1E1E1E">
+
+    <ScrollView>
+        <Grid Padding="20" RowSpacing="20" ColumnSpacing="20">
+            <!-- Configuration des colonnes -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Section Google Maps -->
+            <VerticalStackLayout Grid.Column="0"
+                                 BackgroundColor="#2A2A2A"
+                                 Padding="20"
+                                 Spacing="15">
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <Image Source="car.png"
+                           WidthRequest="30"
+                           HeightRequest="30"
+                           VerticalOptions="Center" />
+                    <Label Text="Itinéraires Routiers (Google Maps)"
+                           FontSize="Medium"
+                           FontAttributes="Bold"
+                           TextColor="#34C759"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <!-- Ville de départ -->
+                <Grid BackgroundColor="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <Entry x:Name="StartCityEntry"
+                           Placeholder="Ville de départ"
+                           TextColor="Black"
+                           BackgroundColor="Transparent"
+                           FontSize="14" />
+                    <Image Source="location.png"
+                           Grid.Column="1"
+                           WidthRequest="20"
+                           HeightRequest="20"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Grid>
+
+                <!-- Ville d'arrivée -->
+                <Grid BackgroundColor="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <Entry x:Name="EndCityEntry"
+                           Placeholder="Ville d'arrivée"
+                           TextColor="Black"
+                           BackgroundColor="Transparent"
+                           FontSize="14" />
+                    <Image Source="location.png"
+                           Grid.Column="1"
+                           WidthRequest="20"
+                           HeightRequest="20"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Grid>
+
+                <Button Text="Rechercher Itinéraires"
+                        Clicked="OnSearchRoutesClicked"
+                        BackgroundColor="#34C759"
+                        TextColor="White"
+                        HeightRequest="50" />
+
+                <CollectionView x:Name="RoutesCollectionView" Margin="0,10">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="#D3D3D3"
+                                   BackgroundColor="#3C3C3C"
+                                   Padding="10"
+                                   CornerRadius="10"
+                                   Margin="5">
+                                <Grid ColumnDefinitions="*, 30">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Title}"
+                                               FontAttributes="Bold"
+                                               FontSize="Medium"
+                                               TextColor="White" />
+                                        <Label Text="{Binding Distance}"
+                                               FontSize="Small"
+                                               TextColor="White" />
+                                        <Label Text="{Binding Duration}"
+                                               FontSize="Small"
+                                               TextColor="White" />
+                                    </VerticalStackLayout>
+                                    <Image Source="destination.png"
+                                           Grid.Column="1"
+                                           WidthRequest="30"
+                                           HeightRequest="30"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="End" />
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <!-- Section SNCF -->
+            <VerticalStackLayout Grid.Column="1"
+                                 BackgroundColor="#333333"
+                                 Padding="20"
+                                 Spacing="15">
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <Image Source="train.png"
+                           WidthRequest="30"
+                           HeightRequest="30"
+                           VerticalOptions="Center" />
+                    <Label Text="Trajets SNCF"
+                           FontSize="Medium"
+                           FontAttributes="Bold"
+                           TextColor="#007AFF"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                
+                <!-- Sélection de la date de départ -->
+                <Label Text="Date de départ:" TextColor="#87CEEB"
+                       FontAttributes="Bold" 
+                       FontSize="Medium"/>
+                <Frame CornerRadius="10" 
+                       BorderColor="#87CEEB" 
+                       BackgroundColor="#2F4F4F" 
+                       Padding="10" 
+                       HasShadow="True">
+                    <DatePicker x:Name="DepartureDatePicker"
+                                TextColor="White"
+                                FontSize="Medium"
+                                BackgroundColor="Transparent" />
+                </Frame>
+                
+                <!-- Sélection de la date de départ -->
+                <Label Text="Date de départ:" TextColor="#87CEEB" 
+                       FontAttributes="Bold"
+                       FontSize="Medium" />
+                <Frame CornerRadius="10" 
+                       BorderColor="#87CEEB" 
+                       BackgroundColor="#2F4F4F" 
+                       Padding="10" 
+                       HasShadow="True">
+                    <TimePicker x:Name="DepartureTimePicker"
+                                TextColor="White"
+                                FontSize="Medium"
+                                BackgroundColor="Transparent" />
+                </Frame>
+
+                <!-- Gare de départ -->
+                <Grid BackgroundColor="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <Entry x:Name="cityEntryDep"
+                           Placeholder="Gare de départ"
+                           TextColor="Black"
+                           BackgroundColor="Transparent"
+                           FontSize="14" />
+                    <Image Source="location.png"
+                           Grid.Column="1"
+                           WidthRequest="20"
+                           HeightRequest="20"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Grid>
+
+                <Button Text="Rechercher Gare de Départ"
+                        CommandParameter="Dep"
+                        Clicked="OnSearchVilleButtonClicked"
+                        BackgroundColor="#007AFF"
+                        TextColor="White" />
+
+                <Frame x:Name="DynamicButtonsContainerDepFrame"
+                       IsVisible="False"
+                       BackgroundColor="#2A2A2A"
+                       Padding="10"
+                       CornerRadius="10"
+                       HasShadow="True"
+                       Margin="0,5">
+                    <StackLayout x:Name="DynamicButtonsContainerDep" />
+                </Frame>
+
+                <!-- Gare d'arrivée -->
+                <Grid BackgroundColor="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <Entry x:Name="cityEntryArv"
+                           Placeholder="Gare d'arrivée"
+                           TextColor="Black"
+                           BackgroundColor="Transparent"
+                           FontSize="14" />
+                    <Image Source="location.png"
+                           Grid.Column="1"
+                           WidthRequest="20"
+                           HeightRequest="20"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Grid>
+
+                <Button Text="Rechercher Gare d'Arrivée"
+                        CommandParameter="Arv"
+                        Clicked="OnSearchVilleButtonClicked"
+                        BackgroundColor="#007AFF"
+                        TextColor="White" />
+
+                <Frame x:Name="DynamicButtonsContainerArvFrame"
+                       IsVisible="False"
+                       BackgroundColor="#2A2A2A"
+                       Padding="10"
+                       CornerRadius="10"
+                       HasShadow="True"
+                       Margin="0,5">
+                    <StackLayout x:Name="DynamicButtonsContainerArv" />
+                </Frame>
+
+                <Button Text="Rechercher le Trajet SNCF"
+                        Clicked="OnSearchTrajetButtonClicked"
+                        BackgroundColor="#FF9500"
+                        TextColor="White"
+                        FontSize="Medium" />
+
+                <CollectionView x:Name="SncfRoutesCollectionView" Margin="0,10">
+    <CollectionView.ItemsLayout>
+        <LinearItemsLayout Orientation="Vertical" 
+                            ItemSpacing="20" /> <!-- Espace entre les éléments -->
+    </CollectionView.ItemsLayout>
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Frame BorderColor="#00BFFF"
+                   BackgroundColor="#524f4f"
+                   Padding="15"
+                   CornerRadius="15"
+                   Margin="10"
+                   HasShadow="True">
+                <Grid ColumnDefinitions="*, 50">
+                    <!-- Texte dans une pile verticale -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding DepartureTime}"
+                               FontAttributes="Bold"
+                               FontSize="Large"
+                               TextColor="#FFD700" />
+                        <Label Text="{Binding ArrivalTime}"
+                               FontSize="Medium"
+                               TextColor="#87CEEB" />
+                        <Label Text="{Binding Duration}"
+                               FontSize="Small"
+                               TextColor="#90EE90" />
+                        <Label Text="{Binding CarbonEmission}"
+                               FontSize="Small"
+                               FontAttributes="Italic"
+                               TextColor="#FF6347" />
+                    </VerticalStackLayout>
+
+                    <!-- Icône de train -->
+                    <Image Source="train_3.png"
+                           Grid.Column="1"
+                           WidthRequest="40"
+                           HeightRequest="40"
+                           VerticalOptions="Center"
+                           HorizontalOptions="End" 
+                           Margin="0,0,5,0"/>
+                </Grid>
+            </Frame>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
